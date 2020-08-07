@@ -21,7 +21,7 @@
         <td>
           <button
             type="button"
-            @click="deleteSite(site.id)"
+            @click="deleteSite(site.key)"
             class="btn btn-danger"
           >
             <DeleteIcon />
@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import DeleteIcon from "./Icons/Delete";
+import DeleteIcon from "./icons/Delete";
 export default {
   props: {
     show: {
@@ -43,6 +43,12 @@ export default {
     data: {
       type: [Array],
       default: () => [],
+    },
+  },
+
+  methods: {
+    deleteSite(key) {
+      this.$store.dispatch("DeleteSite", key);
     },
   },
 
