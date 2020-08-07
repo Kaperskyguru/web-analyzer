@@ -10,10 +10,10 @@
               <p class="text-warning">
                 with just one click of a button and track previous histories.
               </p>
-              <Ping />
+              <Ping v-on:show="showHistory" />
             </div>
           </div>
-          <History :show="true" :data="results" />
+          <History :show="show" :data="sites" />
         </div>
       </div>
     </div>
@@ -23,6 +23,7 @@
 <script>
 import History from "../components/History.vue";
 import Ping from "../components/Ping.vue";
+import { mapState } from "vuex";
 export default {
   components: {
     History,
@@ -31,18 +32,22 @@ export default {
 
   data() {
     return {
-      results: [],
+      show: false,
     };
   },
 
-  created() {
-    const data = [];
-    data.icon = "Larry";
-    data.address = "https://google.com";
-    data.result = "243";
-    for (let i = 1; i <= 3; i++) {
-      this.results.push(data);
-    }
+  computed: {
+    ...mapState(["sites"]),
+  },
+
+  methods: {
+    showHistory(e) {
+      this.show = e;
+    },
+  },
+
+  mounted() {
+    this.show = this.sites.length !== 0 ? true : false;
   },
 };
 </script>
