@@ -27,7 +27,6 @@
 
 <script>
 import Loader from "./Loader";
-import axios from "axios";
 export default {
   components: {
     Loader,
@@ -42,58 +41,36 @@ export default {
 
   methods: {
     async ping() {
-      if (this.url) {
+      if (this.validateURL(this.url)) {
         this.show = true;
-        const t0 = performance.now();
-        // axios.defaults.headers.post["Content-Type"] = "text/html;charset=utf-8";
-        // axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
-        await axios(`https://cors-anywhere.herokuapp.com` + this.url, {
-          mode: "no-cors",
-        });
-        const t1 = performance.now();
-        // console.log(
-        //   window.performance.timing.domContentLoadedEventEnd -
-        //     window.performance.timing.navigationStart
-        // );
-        const payload = {};
-        await this.getFavicon();
-        payload.icon = "Lara";
-        payload.result = t1 - t0;
-
-        this.storeSite(payload);
+        try {
+          await this.$store.dispatch("PingSite", this.url);
+          this.$emit("show", true);
+        } catch (error) {
+          this.show = false;
+        }
         this.show = false;
       } else {
-        alert("Type in a website");
+        alert("Type in a valid web address");
       }
     },
     reset() {
       this.$store.dispatch("ResetStorage");
+      this.$emit("show", false);
     },
 
-    storeSite(data) {
-      const ranKey = Math.random()
-        .toString(36)
-        .substring(5);
-
-      const payload = {};
-      payload.icon = data.icon;
-      payload.key = ranKey;
-      payload.address = this.url;
-      payload.result = data.result;
-      this.$store.dispatch("StoreSite", payload);
-      this.$emit("show", true);
-    },
-
-    async getFavicon() {
-      console.log(
-        await fetch(
-          `https://s2.googleusercontent.com/s2/favicons?domain=${this.url}`,
-          { mode: "no-cors" }
-        )
+    validateURL(url) {
+      var pattern = new RegExp(
+        "^(https?:\\/\\/)?" + // protocol
+        "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|" + // domain name
+        "((\\d{1,3}\\.){3}\\d{1,3}))" + // ip (v4) address
+        "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + //port
+        "(\\?[;&amp;a-z\\d%_.~+=-]*)?" + // query string
+          "(\\#[-a-z\\d_]*)?$",
+        "i"
       );
+      return pattern.test(url);
     },
   },
 };
 </script>
-
-<style></style>
