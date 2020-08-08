@@ -6,10 +6,10 @@ class Storage {
       .map((key) => JSON.parse(localStorage[key]));
   }
   static get(key) {
-    const item = JSON.parse(window.localStorage.getItem(key));
+    const item = JSON.parse(window.localStorage.getItem(INITIALKEY + key));
     return item;
   }
-  static post(key, payload) {
+  static store(key, payload) {
     window.localStorage.setItem(INITIALKEY + key, JSON.stringify(payload));
     return payload;
   }
@@ -20,8 +20,8 @@ class Storage {
   static resetAll() {
     for (let i = 0; i <= window.localStorage.length; i++) {
       const key = window.localStorage.key(i);
-      if (key.startsWith(INITIALKEY)) {
-        window.localStorage.clear();
+      if (key && key.startsWith(INITIALKEY)) {
+        window.localStorage.removeItem(key);
       }
     }
   }

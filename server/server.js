@@ -1,37 +1,13 @@
 const express = require("express");
-const axios = require("axios");
 const cors = require("cors");
 const puppeteer = require("puppeteer");
+const serveStatic = require("serve-static");
+const path = require("path");
 
 const app = express();
 app.use(cors());
 
 app.get("/ping", async (req, res) => {
-  try {
-    const startTime = process.hrtime();
-
-    const { url } = req.query;
-
-    await axios.get(url);
-
-    const diff = process.hrtime(startTime);
-    const elapsedTime = parseInt((diff[0] + diff[1] / 1e9) * 1000);
-
-    return res.json({
-      address: url,
-      result: elapsedTime,
-      icon: "Laravel",
-      key: "asasd",
-    });
-  } catch (error) {
-    return res.json({
-      status: 500,
-      message: "Error occurred",
-    });
-  }
-});
-
-app.get("/puppeteer", async (req, res) => {
   try {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
@@ -76,10 +52,17 @@ app.get("/puppeteer", async (req, res) => {
   }
 });
 
+app.use("/", serveStatic(path.join(__dirname, "../dist")));
+
+app.get(/.*/, function(req, res) {
+  res.sendFile(path.join(__dirname, "../dist/index.html"));
+});
+
 function generateKey() {
   return Math.random()
     .toString(36)
     .substring(5);
 }
 
-app.listen(9000, () => console.log("Server Running"));
+const PORT = process.env.PORT || 9000;
+app.listen(PORT, () => console.log("Server Running on " + PORT));

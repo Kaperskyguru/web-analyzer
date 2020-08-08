@@ -3,8 +3,8 @@
     <div class="overlay"></div>
     <div class="display-t text-center">
       <div class="display-tc">
-        <div class="container">
-          <div class="col-md-12 col-md-offset-0">
+        <div class="container wrapper">
+          <div class="col-md-12 align-content-center">
             <div class="animate-box">
               <h2>Check the load time of your website</h2>
               <p class="text-warning">
@@ -54,10 +54,14 @@ export default {
 
 <style scoped>
 .video-hero {
-  height: 700px;
+  /* padding: 10px; */
   background-image: url(/images/cover_img_1.jpg);
   background-size: cover;
   background-position: center center;
   background-attachment: fixed;
+}
+
+.wrapper {
+  margin-top: 120px;
 }
 </style>
