@@ -11,7 +11,17 @@ app.get("/ping", async (req, res) => {
   try {
     const browser = await puppeteer.launch({ args: ["--no-sandbox"] });
     const page = await browser.newPage();
+
+    //Important optimizations to get accurate results
     await page.setCacheEnabled(false);
+    await page.setRequestInterception(true);
+    page.on("request", (request) => {
+      if (request.resourceType() === "document") {
+        request.continue();
+      } else {
+        request.abort();
+      }
+    });
     let { url } = req.query;
 
     await page.goto(url);
