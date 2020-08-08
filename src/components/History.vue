@@ -15,10 +15,10 @@
     <tbody>
       <tr v-for="(site, i) of data" :key="i">
         <th scope="row">{{ i + 1 }}</th>
-        <td>{{ site.icon }}</td>
+        <td><img :src="site.icon" width="25" height="25" alt="Favicon" /></td>
         <td>{{ site.address }}</td>
         <td>{{ site.result }}ms</td>
-        <td>
+        <td width="20" height="20" class="text-center">
           <button
             type="button"
             @click="deleteSite(site.key)"
@@ -45,7 +45,6 @@ export default {
       default: () => [],
     },
   },
-
   methods: {
     deleteSite(key) {
       this.$store.dispatch("DeleteSite", key);

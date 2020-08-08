@@ -1,7 +1,8 @@
 import Vue from "vue";
 import Vuex from "vuex";
 
-import Storage from "./Services/StorageService";
+import Storage from "./services/StorageService";
+import Ping from "./api/Ping";
 
 Vue.use(Vuex);
 
@@ -16,8 +17,13 @@ const store = new Vuex.Store({
       commit("RESET_SITES");
     },
 
-    StoreSite({ commit }, payload) {
-      commit("STORE_SITE", payload);
+    async PingSite({ commit }, payload) {
+      const response = await Ping.pingwithPuppeteer(payload);
+      const { data } = response;
+      if (data.address) {
+        commit("STORE_SITE", data);
+      }
+      console.log(data);
     },
 
     async DeleteSite({ commit }, key) {
@@ -32,7 +38,7 @@ const store = new Vuex.Store({
     },
 
     DELETE_SITE: (state, key) => {
-      const index = state.sites.findIndex((site) => site.key == "web__" + key);
+      const index = state.sites.findIndex((site) => site.key == key);
       state.sites.splice(index, 1);
     },
 
