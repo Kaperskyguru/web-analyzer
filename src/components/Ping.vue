@@ -27,7 +27,7 @@
 
 <script>
 import Loader from "./Loader";
-
+import axios from "axios";
 export default {
   components: {
     Loader,
@@ -45,22 +45,22 @@ export default {
       if (this.url) {
         this.show = true;
         const t0 = performance.now();
-        await fetch(this.url, { mode: "no-cors", cache: "no-cache" });
+        // axios.defaults.headers.post["Content-Type"] = "text/html;charset=utf-8";
+        // axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
+        await axios(`https://cors-anywhere.herokuapp.com` + this.url, {
+          mode: "no-cors",
+        });
         const t1 = performance.now();
-        console.log(
-          window.performance.timing.domContentLoadedEventEnd -
-            window.performance.timing.navigationStart
-        );
+        // console.log(
+        //   window.performance.timing.domContentLoadedEventEnd -
+        //     window.performance.timing.navigationStart
+        // );
         const payload = {};
         await this.getFavicon();
         payload.icon = "Lara";
         payload.result = t1 - t0;
 
         this.storeSite(payload);
-        console.log(
-          `Call to doSomething took ${t1 - t0} milliseconds.`,
-          this.url
-        );
         this.show = false;
       } else {
         alert("Type in a website");
