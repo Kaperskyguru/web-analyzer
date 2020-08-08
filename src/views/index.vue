@@ -8,7 +8,7 @@
             <div class="animate-box">
               <h2>Check the load time of your website</h2>
               <p class="text-warning">
-                with just one click of a button and track previous histories.
+                with just a click of a button and track previous histories.
               </p>
               <Ping v-on:show="showHistory" />
             </div>
@@ -62,6 +62,6 @@ export default {
 }
 
 .wrapper {
-  margin-top: 120px;
+  margin-top: 50px;
 }
 </style>
