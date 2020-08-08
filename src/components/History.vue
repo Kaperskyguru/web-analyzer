@@ -1,6 +1,6 @@
 <template>
   <table
-    class="table table-bordered table-hover table-active text-white table-sm table-responsive-md"
+    class="table table-bordered table-hover table-active text-white table-sm table-responsive-md table-responsive-sm"
     v-if="show"
   >
     <thead>
@@ -41,7 +41,7 @@ export default {
       default: false,
     },
     data: {
-      type: [Array],
+      type: Array,
       default: () => [],
     },
   },
@@ -50,7 +50,10 @@ export default {
       this.$store.dispatch("DeleteSite", key);
     },
   },
-
+  mounted() {
+    // document.getElementById("history").DataTable();
+    // console.log(document.getElementById("history"));
+  },
   components: {
     DeleteIcon,
   },

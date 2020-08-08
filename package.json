@@ -6,7 +6,8 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "start": "concurrently \"npm run serve\" \"cd src/server && node server.js --scripts-prepend-node-path\""
+    "dev": "concurrently \"npm run serve\" \"node server/server.js --scripts-prepend-node-path\"",
+    "start": "npm run build && node server/server.js"
   },
   "dependencies": {
     "axios": "^0.19.2",
@@ -16,6 +17,7 @@
     "express": "^4.17.1",
     "gulp-purgecss": "^2.3.0",
     "puppeteer": "^5.2.1",
+    "serve-static": "^1.14.1",
     "vue": "^2.6.11",
     "vue-router": "^3.4.2",
     "vuex": "^3.5.1"
