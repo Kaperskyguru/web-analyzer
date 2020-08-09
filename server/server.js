@@ -74,5 +74,12 @@ function generateKey() {
     .substring(5);
 }
 
+// const production = 'https://examplePage.com';
+// const development = 'http://localhost:3000/';
+// const url = (process.env.NODE_ENV ? production : development);
 const PORT = process.env.PORT || 9000;
-app.listen(PORT, () => console.log("Server Running on " + PORT));
+const server = app.listen(PORT, () => {
+  var host = server.address().address;
+  var port = server.address().port;
+  console.log("Server listening at http://%s:%s", host, port);
+});
