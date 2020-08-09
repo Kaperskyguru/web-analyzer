@@ -74,8 +74,4 @@ function generateKey() {
 }
 
 const PORT = process.env.PORT || 9000;
-const server = app.listen(PORT, () => {
-  var host = server.address().address;
-  var port = server.address().port;
-  console.log("Server listening at http://%s:%s", host, port);
-});
+app.listen(PORT, () => {});

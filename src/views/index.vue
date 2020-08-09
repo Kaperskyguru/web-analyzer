@@ -47,14 +47,13 @@ export default {
   },
 
   mounted() {
-    this.show = this.sites.length !== 0 ? true : false;
+    this.show = this.sites.length !== 0;
   },
 };
 </script>
 
 <style scoped>
 .video-hero {
-  /* padding: 10px; */
   background-image: url(/images/cover_img_1.jpg);
   background-size: cover;
   background-position: center center;
@@ -62,6 +61,6 @@ export default {
 }
 
 .wrapper {
-  margin-top: 50px;
+  margin-top: 70px;
 }
 </style>

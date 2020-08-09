@@ -50,10 +50,6 @@ export default {
       this.$store.dispatch("DeleteSite", key);
     },
   },
-  mounted() {
-    // document.getElementById("history").DataTable();
-    // console.log(document.getElementById("history"));
-  },
   components: {
     DeleteIcon,
   },
