@@ -4,8 +4,14 @@
     :class="{ show: show }"
     role="alert"
   >
-    {{ message }} {{ show }}
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    {{ message }}
+    <button
+      type="button"
+      @click="dismiss"
+      class="close"
+      data-dismiss="alert"
+      aria-label="Close"
+    >
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
@@ -21,6 +27,12 @@ export default {
     show: {
       type: Boolean,
       default: false,
+    },
+  },
+
+  methods: {
+    dismiss() {
+      this.show = false;
     },
   },
 };
