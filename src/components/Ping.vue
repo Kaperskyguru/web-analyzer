@@ -3,7 +3,7 @@
     <div class="form-row">
       <div class="form-group mb-2 col-md-8 col-sm-12">
         <input
-          type="url"
+          type="text"
           v-model="url"
           placeholder="Enter your web address here"
           class="form-control"
@@ -21,15 +21,19 @@
         Reset
       </button>
     </div>
+    <Alert :show="showError" :message="errors.message" v-if="showError" />
     <Loader :show="show" />
   </form>
 </template>
 
 <script>
 import Loader from "./Loader";
+import Alert from "./Alert";
+import { mapState } from "vuex";
 export default {
   components: {
     Loader,
+    Alert,
   },
 
   data() {
@@ -37,6 +41,12 @@ export default {
       show: false,
       url: "",
     };
+  },
+  computed: {
+    ...mapState(["errors"]),
+    showError() {
+      return this.errors.length !== 0;
+    },
   },
 
   methods: {
@@ -60,16 +70,23 @@ export default {
     },
 
     validateURL(url) {
-      var pattern = new RegExp(
-        "^(https?:\\/\\/)?" + // protocol
-        "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|" + // domain name
-        "((\\d{1,3}\\.){3}\\d{1,3}))" + // ip (v4) address
-        "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + //port
-        "(\\?[;&amp;a-z\\d%_.~+=-]*)?" + // query string
-          "(\\#[-a-z\\d_]*)?$",
-        "i"
-      );
-      return pattern.test(url);
+      // var pattern = new RegExp(
+      //   "^(https?:\\/\\/)?" + // protocol
+      //   "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|" + // domain name
+      //   "((\\d{1,3}\\.){3}\\d{1,3}))" + // ip (v4) address
+      //   "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + //port
+      //   "(\\?[;&amp;a-z\\d%_.~+=-]*)?" + // query string
+      //     "(\\#[-a-z\\d_]*)?$",
+      //   "i"
+      // );
+      // return pattern.test(url);
+
+      try {
+        new URL(url);
+      } catch (error) {
+        return false;
+      }
+      return true;
     },
   },
 };
