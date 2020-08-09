@@ -6,6 +6,7 @@ const path = require("path");
 
 const app = express();
 app.use(cors());
+app.use(serveStatic(path.join(__dirname, "../dist")));
 
 app.get("/ping", async (req, res) => {
   try {
@@ -62,7 +63,7 @@ app.get("/ping", async (req, res) => {
   }
 });
 
-app.use("/", serveStatic(path.join(__dirname, "../dist")));
+// app.use("/static"));
 
 app.get(/.*/, function(req, res) {
   res.sendFile(path.join(__dirname, "../dist/index.html"));
