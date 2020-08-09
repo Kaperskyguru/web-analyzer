@@ -51,17 +51,18 @@ export default {
 
   methods: {
     async ping() {
-      if (this.validateURL(this.url)) {
+      const url = this.validateURL(this.url);
+      if (url) {
         this.show = true;
         try {
-          await this.$store.dispatch("PingSite", this.url);
+          await this.$store.dispatch("PingSite", url);
           this.$emit("show", true);
         } catch (error) {
           this.show = false;
         }
         this.show = false;
       } else {
-        alert("Type in a valid web address");
+        alert("Type in a valid web address: (https://example.com)");
       }
     },
     reset() {
@@ -70,23 +71,15 @@ export default {
     },
 
     validateURL(url) {
-      // var pattern = new RegExp(
-      //   "^(https?:\\/\\/)?" + // protocol
-      //   "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|" + // domain name
-      //   "((\\d{1,3}\\.){3}\\d{1,3}))" + // ip (v4) address
-      //   "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + //port
-      //   "(\\?[;&amp;a-z\\d%_.~+=-]*)?" + // query string
-      //     "(\\#[-a-z\\d_]*)?$",
-      //   "i"
-      // );
-      // return pattern.test(url);
-
       try {
+        if (url.substr(0, 2) === "ww") {
+          url = "https://" + url;
+        }
         new URL(url);
       } catch (error) {
         return false;
       }
-      return true;
+      return url;
     },
   },
 };

@@ -12,7 +12,6 @@ app.get("/ping", async (req, res) => {
   try {
     // Launch a new Browser
     browser = await puppeteer.launch({
-      headless: false,
       args: ["--no-sandbox"],
     });
     const page = await browser.newPage();
@@ -43,7 +42,6 @@ app.get("/ping", async (req, res) => {
     const pref = await page.evaluate((url) => {
       const { loadEventEnd, navigationStart } = performance.timing;
 
-      console.log(loadEventEnd, navigationStart);
       // Generate Favicon
       let icon =
         document.querySelector('link[rel="icon"]') ||
