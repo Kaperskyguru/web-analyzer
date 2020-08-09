@@ -18,8 +18,9 @@ class Storage {
     return true;
   }
   static resetAll() {
-    for (let i = 0; i <= window.localStorage.length; i++) {
+    for (let i = 0, len = window.localStorage.length; i < len; i++) {
       const key = window.localStorage.key(i);
+      console.log(key, i);
       if (key && key.startsWith(INITIALKEY)) {
         window.localStorage.removeItem(key);
       }
