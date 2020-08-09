@@ -9,8 +9,6 @@ app.use(cors());
 app.use(serveStatic(path.join(__dirname, "../dist")));
 
 app.get("/ping", async (req, res) => {
-  res.setHeader("Content-Type", "application/json");
-  res.json({ test: "test" });
   try {
     const browser = await puppeteer.launch({ args: ["--no-sandbox"] });
     const page = await browser.newPage();
@@ -65,8 +63,6 @@ app.get("/ping", async (req, res) => {
   }
 });
 
-// app.use("/static"));
-
 app.get("/", function(req, res) {
   res.sendFile(path.join(__dirname, "../dist/index.html"));
 });
@@ -77,9 +73,6 @@ function generateKey() {
     .substring(5);
 }
 
-// const production = 'https://examplePage.com';
-// const development = 'http://localhost:3000/';
-// const url = (process.env.NODE_ENV ? production : development);
 const PORT = process.env.PORT || 9000;
 const server = app.listen(PORT, () => {
   var host = server.address().address;
