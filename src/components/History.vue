@@ -10,6 +10,7 @@
           <th scope="col">Icon</th>
           <th scope="col">Site</th>
           <th scope="col">Ping</th>
+          <th scope="col">Load Time</th>
           <th scope="col">Delete</th>
         </tr>
       </thead>
@@ -19,6 +20,7 @@
           <td><img :src="site.icon" width="25" height="25" alt="Favicon" /></td>
           <td>{{ site.address }}</td>
           <td>{{ site.result }}ms</td>
+          <td>{{ site.loadTime }}ms</td>
           <td width="20" height="20" class="text-center">
             <button
               type="button"

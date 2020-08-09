@@ -18,14 +18,6 @@ app.get("/ping", async (req, res) => {
 
     //Important optimizations to get accurate results
     await page.setCacheEnabled(false);
-    await page.setRequestInterception(true);
-    page.on("request", (request) => {
-      if (request.resourceType() === "document") {
-        request.continue();
-      } else {
-        request.abort();
-      }
-    });
 
     // Visit page and catch any error
     let { url } = req.query;
@@ -40,7 +32,12 @@ app.get("/ping", async (req, res) => {
 
     // Evaluate page and get Load Time and Favicon
     const pref = await page.evaluate((url) => {
-      const { loadEventEnd, navigationStart } = performance.timing;
+      const {
+        responseStart,
+        loadEventEnd,
+        navigationStart,
+        requestStart,
+      } = performance.timing;
 
       // Generate Favicon
       let icon =
@@ -59,6 +56,7 @@ app.get("/ping", async (req, res) => {
       }
 
       return {
+        responseTime: responseStart - requestStart,
         loadTime: loadEventEnd - navigationStart,
         icon: iconHref,
       };
@@ -68,7 +66,8 @@ app.get("/ping", async (req, res) => {
     await browser.close();
     return res.json({
       address: url,
-      result: pref.loadTime,
+      result: pref.responseTime,
+      loadTime: pref.loadTime,
       icon: pref.icon,
       key: generateKey(),
     });
