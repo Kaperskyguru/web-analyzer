@@ -68,6 +68,10 @@ app.get(/.*/, function(req, res) {
   res.sendFile(path.join(__dirname, "../dist/index.html"));
 });
 
+app.get(/ping.*/, function(req, res) {
+  res.sendFile(path.join(__dirname, "../dist/index.html"));
+});
+
 function generateKey() {
   return Math.random()
     .toString(36)
