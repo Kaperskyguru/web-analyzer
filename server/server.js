@@ -67,9 +67,9 @@ app.get("/ping", async (req, res) => {
 
 // app.use("/static"));
 
-app.get("/", function(req, res) {
-  res.sendFile(path.join(__dirname, "../dist/index.html"));
-});
+// app.get("/", function(req, res) {
+//   res.sendFile(path.join(__dirname, "../dist/index.html"));
+// });
 
 // function generateKey() {
 //   return Math.random()
