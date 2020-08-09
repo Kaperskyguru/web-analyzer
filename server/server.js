@@ -3,14 +3,17 @@ const cors = require("cors");
 const puppeteer = require("puppeteer");
 const serveStatic = require("serve-static");
 const path = require("path");
-
 const app = express();
 app.use(cors());
 app.use(serveStatic(path.join(__dirname, "../dist")));
 
 app.get("/ping", async (req, res) => {
+  let browser;
   try {
-    const browser = await puppeteer.launch({ args: ["--no-sandbox"] });
+    // Launch a new Browser
+    browser = await puppeteer.launch({
+      args: ["--no-sandbox"],
+    });
     const page = await browser.newPage();
 
     //Important optimizations to get accurate results
@@ -23,13 +26,23 @@ app.get("/ping", async (req, res) => {
         request.abort();
       }
     });
+
+    // Visit page and catch any error
     let { url } = req.query;
+    await page.goto(parseURL(url)).catch(async (error) => {
+      await browser.close();
+      return res.json({
+        status: 500,
+        message: "Error Occurred, Please check the web address and try again",
+        error: error,
+      });
+    });
 
-    await page.goto(url);
-
+    // Evaluate page and get Load Time and Favicon
     const pref = await page.evaluate((url) => {
       const { loadEventEnd, navigationStart } = performance.timing;
 
+      // Generate Favicon
       let icon =
         document.querySelector('link[rel="icon"]') ||
         document.querySelector('link[rel="shortcut icon"]');
@@ -41,12 +54,17 @@ app.get("/ping", async (req, res) => {
         iconHref = icon.getAttribute("href");
       }
 
+      if (iconHref.substr(0, 2) === "./") {
+        iconHref = url + iconHref.substr(1, iconHref.length);
+      }
+
       return {
         loadTime: loadEventEnd - navigationStart,
         icon: iconHref,
       };
     }, url);
 
+    // Close Browser and return result
     await browser.close();
     return res.json({
       address: url,
@@ -55,10 +73,10 @@ app.get("/ping", async (req, res) => {
       key: generateKey(),
     });
   } catch (error) {
+    await browser.close();
     return res.json({
       status: 500,
-      message: "Error occurred",
-      error: error,
+      message: "Error Occurred",
     });
   }
 });
@@ -71,6 +89,13 @@ function generateKey() {
   return Math.random()
     .toString(36)
     .substring(5);
+}
+
+function parseURL(url) {
+  if (url.substr(0, 2) === "ww") {
+    url = "https://" + url;
+  }
+  return url;
 }
 
 const PORT = process.env.PORT || 9000;
